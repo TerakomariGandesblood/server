@@ -9,8 +9,19 @@ use supports_color::Stream;
 #[derive(Parser)]
 #[command(version, about, long_about = None, styles = get_styles())]
 pub struct Args {
+    /// 网站文件夹路径
     #[arg(value_parser = dir_exists)]
     pub path: PathBuf,
+
+    /// 安装并运行服务
+    #[cfg(not(windows))]
+    #[arg(long, default_value_t = false)]
+    pub install: bool,
+
+    /// 停止并卸载服务
+    #[cfg(not(windows))]
+    #[arg(long, default_value_t = false)]
+    pub uninstall: bool,
 
     #[command(flatten)]
     pub verbose: Verbosity,

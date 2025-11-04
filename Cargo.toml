@@ -99,6 +99,10 @@ uuid = { version = "1.18.1", default-features = false, features = [
   "v4",
   "fast-rng",
 ] }
+# https://github.com/chipsenkbeil/service-manager-rs
+service-manager = { version = "0.8.0", default-features = false, features = [
+  "encoding",
+] }
 
 [profile.release]
 strip = true
