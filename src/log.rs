@@ -1,6 +1,7 @@
 use std::env;
 use std::path::Path;
 
+use anyhow::Result;
 use clap_verbosity_flag::Verbosity;
 use supports_color::Stream;
 use tracing::subscriber;
@@ -12,7 +13,7 @@ use tracing_subscriber::fmt::Layer;
 use tracing_subscriber::fmt::time::ChronoLocal;
 use tracing_subscriber::layer::SubscriberExt;
 
-pub fn init_log<T>(verbose: &Verbosity, log_file_path: T, app_name: &str) -> WorkerGuard
+pub fn init_log<T>(verbose: &Verbosity, log_file_path: T, app_name: &str) -> Result<WorkerGuard>
 where
     T: AsRef<Path>,
 {
@@ -22,7 +23,7 @@ where
                 env::set_var("RUST_LOG", "none");
             }
         } else {
-            LogTracer::init().unwrap();
+            LogTracer::init()?;
             unsafe {
                 env::set_var(
                     "RUST_LOG",
@@ -40,8 +41,7 @@ where
         .rotation(Rotation::DAILY)
         .filename_prefix(format!("{}.log", app_name))
         .max_log_files(7)
-        .build(log_file_path)
-        .unwrap();
+        .build(log_file_path)?;
     let (file_writer, guard) = tracing_appender::non_blocking(file_appender);
 
     let layer = Layer::default()
@@ -56,7 +56,7 @@ where
         .finish()
         .with(layer);
 
-    subscriber::set_global_default(subscriber).unwrap();
+    subscriber::set_global_default(subscriber)?;
 
-    guard
+    Ok(guard)
 }
