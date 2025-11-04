@@ -13,7 +13,7 @@ async fn main() -> Result<()> {
     let _guard = server::init_log(&args.verbose, "log", env!("CARGO_CRATE_NAME"));
 
     if args.install {
-        server::install_start_service(env!("CARGO_CRATE_NAME"), &args.verbose)?;
+        server::install_start_service(env!("CARGO_CRATE_NAME"), &args.path, &args.verbose)?;
         return Ok(());
     }
     if args.uninstall {
