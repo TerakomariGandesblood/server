@@ -2,7 +2,6 @@ mod api;
 
 use std::borrow::Cow;
 use std::path::Path;
-use std::thread;
 use std::time::Duration;
 
 use axum::error_handling::HandleErrorLayer;
@@ -11,8 +10,6 @@ use axum::http::StatusCode;
 use axum::response::{IntoResponse, Redirect};
 use axum::{BoxError, Router, routing};
 use tower::ServiceBuilder;
-use tower_governor::GovernorLayer;
-use tower_governor::governor::GovernorConfigBuilder;
 use tower_http::compression::CompressionLayer;
 use tower_http::decompression::RequestDecompressionLayer;
 use tower_http::services::ServeDir;
@@ -24,21 +21,6 @@ const USERNAME: &str = "terakomari";
 const PASSWORD: &str = "orange";
 
 pub fn router(path: &Path) -> Router {
-    let governor_conf = GovernorConfigBuilder::default()
-        .per_second(1)
-        .burst_size(100)
-        .use_headers()
-        .finish()
-        .unwrap();
-
-    let governor_limiter = governor_conf.limiter().clone();
-    thread::spawn(move || {
-        loop {
-            thread::sleep(Duration::from_secs(60));
-            governor_limiter.retain_recent();
-        }
-    });
-
     Router::new()
         .route("/health-check", routing::get(api::health_check))
         .route(
@@ -57,7 +39,6 @@ pub fn router(path: &Path) -> Router {
                 .layer(CompressionLayer::new())
                 .layer(TraceLayer::new_for_http())
                 .layer(DefaultBodyLimit::max(128 * 1024 * 1024))
-                .layer(GovernorLayer::new(governor_conf))
                 .load_shed()
                 .concurrency_limit(1024)
                 .timeout(Duration::from_secs(10 * 60)),
