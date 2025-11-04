@@ -1,3 +1,5 @@
+use std::net::SocketAddr;
+
 use anyhow::Result;
 use clap::Parser;
 use mimalloc::MiMalloc;
@@ -25,9 +27,12 @@ async fn main() -> Result<()> {
     let listener = TcpListener::bind("127.0.0.1:8001").await?;
     tracing::info!("listening on {}", listener.local_addr()?);
 
-    axum::serve(listener, router)
-        .with_graceful_shutdown(server::shutdown_signal())
-        .await?;
+    axum::serve(
+        listener,
+        router.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .with_graceful_shutdown(server::shutdown_signal())
+    .await?;
 
     Ok(())
 }
