@@ -55,6 +55,10 @@ tower-http = { version = "0.6.6", default-features = false, features = [
   "trace",
   "fs",
 ] }
+# https://github.com/benwis/tower-governor
+tower_governor = { version = "0.8.0", default-features = false, features = [
+  "axum",
+] }
 # https://github.com/tokio-rs/tokio
 tokio = { version = "1.48.0", default-features = false, features = [
   "fs",
