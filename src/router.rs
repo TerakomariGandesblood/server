@@ -12,7 +12,7 @@ use axum::{BoxError, Router, routing};
 use tower::ServiceBuilder;
 use tower_http::compression::CompressionLayer;
 use tower_http::decompression::RequestDecompressionLayer;
-use tower_http::services::ServeDir;
+use tower_http::services::{ServeDir, ServeFile};
 use tower_http::trace::TraceLayer;
 use tower_http::validate_request::ValidateRequestHeaderLayer;
 
@@ -20,18 +20,23 @@ const USERNAME: &str = "terakomari";
 
 const PASSWORD: &str = "orange";
 
+const FILES_DIR_PATH: &str = "static";
+
 pub fn router(path: &Path) -> Router {
     Router::new()
-        .route("/health-check", routing::get(api::health_check))
-        .route(
-            "/upload",
-            routing::post(api::upload).layer(ValidateRequestHeaderLayer::basic(USERNAME, PASSWORD)),
-        )
         .route(
             "/",
             routing::get(|| async { Redirect::permanent("/index.html") }),
         )
-        .fallback_service(ServeDir::new(path))
+        .route(
+            "/api/upload",
+            routing::post(api::upload).layer(ValidateRequestHeaderLayer::basic(USERNAME, PASSWORD)),
+        )
+        .route("/api/list", routing::get(api::list))
+        .nest_service(&format!("/{FILES_DIR_PATH}"), ServeDir::new(FILES_DIR_PATH))
+        .fallback_service(
+            ServeDir::new(path).not_found_service(ServeFile::new(path.join("404.html"))),
+        )
         .layer(
             ServiceBuilder::new()
                 .layer(HandleErrorLayer::new(handle_error))

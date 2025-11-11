@@ -5,20 +5,14 @@ use axum::body::Bytes;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use axum_typed_multipart::{FieldData, TryFromMultipart, TypedMultipart};
+use jiff::tz::TimeZone;
+use jiff::{Timestamp, Zoned};
 use serde::Serialize;
 use tokio::fs;
 use uuid::Uuid;
+use walkdir::WalkDir;
 
 use crate::ServerError;
-
-#[derive(Serialize)]
-struct HealthCheck {
-    ok: bool,
-}
-
-pub async fn health_check() -> impl IntoResponse {
-    Json(HealthCheck { ok: true })
-}
 
 #[derive(TryFromMultipart)]
 pub struct FileUpload {
@@ -33,7 +27,7 @@ pub async fn upload(
         return Ok((StatusCode::BAD_REQUEST, "upload file is empty").into_response());
     }
 
-    let base_path = PathBuf::from("upload");
+    let base_path = PathBuf::from(super::FILES_DIR_PATH);
     fs::create_dir_all(&base_path).await?;
 
     for file in files {
@@ -54,4 +48,34 @@ pub async fn upload(
     }
 
     Ok(StatusCode::CREATED.into_response())
+}
+
+#[derive(Serialize)]
+pub struct FileInfo {
+    path: PathBuf,
+    file_name: String,
+    create_time: Zoned,
+}
+
+pub async fn list() -> Result<Json<Vec<FileInfo>>, ServerError> {
+    let mut files = Vec::new();
+
+    for entry in WalkDir::new(super::FILES_DIR_PATH)
+        .into_iter()
+        .filter_map(|e| e.ok())
+        .filter(|e| e.path().is_file())
+    {
+        let path = entry.path().to_path_buf();
+        let file_name = path.file_name().unwrap().to_str().unwrap().to_string();
+        let create_time =
+            Timestamp::try_from(entry.metadata()?.created()?)?.to_zoned(TimeZone::system());
+
+        files.push(FileInfo {
+            path,
+            file_name,
+            create_time,
+        });
+    }
+
+    Ok(Json(files))
 }
