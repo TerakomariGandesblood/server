@@ -1,6 +1,5 @@
+use std::env;
 use std::ffi::OsString;
-use std::path::Path;
-use std::{env, fs};
 
 use anyhow::Result;
 use clap_verbosity_flag::{Verbosity, VerbosityFilter};
@@ -41,15 +40,13 @@ pub fn stop_uninstall_service(service_name: &str) -> Result<()> {
     Ok(())
 }
 
-pub fn install_start_service(service_name: &str, path: &Path, verbose: &Verbosity) -> Result<()> {
+pub fn install_start_service(service_name: &str, verbose: &Verbosity) -> Result<()> {
     stop_uninstall_service(service_name)?;
 
     let manager = make_service_manager()?;
     let label: ServiceLabel = service_name.parse()?;
 
-    let web_path = fs::canonicalize(path)?;
-    let mut args = verbose_to_str(verbose);
-    args.push(web_path.as_os_str().to_os_string());
+    let args = verbose_to_str(verbose);
 
     manager.install(ServiceInstallCtx {
         label: label.clone(),

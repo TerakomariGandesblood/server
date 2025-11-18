@@ -15,7 +15,7 @@ async fn main() -> Result<()> {
     let _guard = server::init_log(&args.verbose, "log", env!("CARGO_CRATE_NAME"));
 
     if args.install {
-        server::install_start_service(env!("CARGO_CRATE_NAME"), &args.path, &args.verbose)?;
+        server::install_start_service(env!("CARGO_CRATE_NAME"), &args.verbose)?;
         return Ok(());
     }
     if args.uninstall {
@@ -23,7 +23,7 @@ async fn main() -> Result<()> {
         return Ok(());
     }
 
-    let router = server::router(&args.path);
+    let router = server::router();
     let listener = TcpListener::bind("127.0.0.1:8001").await?;
     tracing::info!("listening on {}", listener.local_addr()?);
 

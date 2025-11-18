@@ -28,7 +28,7 @@ where
                 env::set_var(
                     "RUST_LOG",
                     format!(
-                        "none,tower_http={0},axum={0},{1}={0}",
+                        "none,tower_http={0},axum={0},memory_serve={0},{1}={0}",
                         verbose.filter(),
                         env!("CARGO_CRATE_NAME")
                     ),

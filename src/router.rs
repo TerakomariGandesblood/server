@@ -1,7 +1,6 @@
 mod api;
 
 use std::borrow::Cow;
-use std::path::Path;
 use std::time::Duration;
 
 use axum::error_handling::HandleErrorLayer;
@@ -13,7 +12,7 @@ use tower::ServiceBuilder;
 use tower::buffer::BufferLayer;
 use tower_http::compression::CompressionLayer;
 use tower_http::decompression::RequestDecompressionLayer;
-use tower_http::services::{ServeDir, ServeFile};
+use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
 use tower_http::validate_request::ValidateRequestHeaderLayer;
 
@@ -23,7 +22,11 @@ const PASSWORD: &str = "orange";
 
 const FILES_DIR_PATH: &str = "static";
 
-pub fn router(path: &Path) -> Router {
+pub fn router() -> Router {
+    let memory_router = memory_serve::load!()
+        .fallback(Some("/404.html"))
+        .into_router();
+
     Router::new()
         .route(
             "/api/upload",
@@ -31,9 +34,7 @@ pub fn router(path: &Path) -> Router {
         )
         .route("/api/list", routing::get(api::list))
         .nest_service(&format!("/{FILES_DIR_PATH}"), ServeDir::new(FILES_DIR_PATH))
-        .fallback_service(
-            ServeDir::new(path).not_found_service(ServeFile::new(path.join("404.html"))),
-        )
+        .merge(memory_router)
         .layer(
             ServiceBuilder::new()
                 .layer(HandleErrorLayer::new(handle_error))

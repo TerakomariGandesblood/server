@@ -5,6 +5,7 @@ edition = "2024"
 rust-version = "1.88"
 license = "MIT OR Apache-2.0"
 authors = ["Terakomari <im.terakomari@icloud.com>"]
+build = "build.rs"
 
 [dependencies]
 # https://github.com/dtolnay/anyhow
@@ -113,6 +114,12 @@ jiff = { version = "0.2.16", default-features = false, features = [
   "perf-inline",
   "serde",
 ] }
+# https://github.com/tweedegolf/memory-serve
+memory-serve = { version = "2.0.0-beta.0", default-features = false }
+
+[build-dependencies]
+# https://github.com/tweedegolf/memory-serve
+memory-serve = { version = "2.0.0-beta.0", default-features = false }
 
 [profile.release]
 strip = true
