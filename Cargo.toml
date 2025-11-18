@@ -30,7 +30,7 @@ tracing-log = { version = "0.2.0", default-features = false, features = [
   "log-tracer",
 ] }
 # https://github.com/tokio-rs/axum
-axum = { version = "0.8.6", default-features = false, features = [
+axum = { version = "0.8.7", default-features = false, features = [
   "http1",
   "http2",
   "json",
@@ -46,6 +46,7 @@ tower = { version = "0.5.2", default-features = false, features = [
   "limit",
   "load-shed",
   "timeout",
+  "buffer",
 ] }
 # https://github.com/tower-rs/tower-http
 tower-http = { version = "0.6.6", default-features = false, features = [
@@ -65,7 +66,7 @@ tokio = { version = "1.48.0", default-features = false, features = [
 # https://github.com/zkat/supports-color
 supports-color = { version = "3.0.2", default-features = false }
 # https://github.com/clap-rs/clap
-clap = { version = "4.5.51", default-features = false, features = [
+clap = { version = "4.5.52", default-features = false, features = [
   "std",
   "color",
   "help",

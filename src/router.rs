@@ -10,6 +10,7 @@ use axum::http::StatusCode;
 use axum::response::{IntoResponse, Redirect};
 use axum::{BoxError, Router, routing};
 use tower::ServiceBuilder;
+use tower::buffer::BufferLayer;
 use tower_http::compression::CompressionLayer;
 use tower_http::decompression::RequestDecompressionLayer;
 use tower_http::services::{ServeDir, ServeFile};
@@ -40,13 +41,14 @@ pub fn router(path: &Path) -> Router {
         .layer(
             ServiceBuilder::new()
                 .layer(HandleErrorLayer::new(handle_error))
+                .timeout(Duration::from_secs(10 * 60))
+                .layer(BufferLayer::new(1024))
+                .concurrency_limit(1024)
+                .load_shed()
                 .layer(RequestDecompressionLayer::new())
                 .layer(CompressionLayer::new())
-                .layer(TraceLayer::new_for_http())
                 .layer(DefaultBodyLimit::max(128 * 1024 * 1024))
-                .load_shed()
-                .concurrency_limit(1024)
-                .timeout(Duration::from_secs(10 * 60)),
+                .layer(TraceLayer::new_for_http()),
         )
 }
 
