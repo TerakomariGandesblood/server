@@ -7,7 +7,7 @@ use std::time::Duration;
 use axum::error_handling::HandleErrorLayer;
 use axum::extract::DefaultBodyLimit;
 use axum::http::StatusCode;
-use axum::response::{IntoResponse, Redirect};
+use axum::response::IntoResponse;
 use axum::{BoxError, Router, routing};
 use tower::ServiceBuilder;
 use tower::buffer::BufferLayer;
@@ -26,10 +26,6 @@ const FILES_DIR_PATH: &str = "static";
 pub fn router(path: &Path) -> Router {
     Router::new()
         .route(
-            "/",
-            routing::get(|| async { Redirect::permanent("/index.html") }),
-        )
-        .route(
             "/api/upload",
             routing::post(api::upload).layer(ValidateRequestHeaderLayer::basic(USERNAME, PASSWORD)),
         )
@@ -41,12 +37,12 @@ pub fn router(path: &Path) -> Router {
         .layer(
             ServiceBuilder::new()
                 .layer(HandleErrorLayer::new(handle_error))
+                .layer(RequestDecompressionLayer::new())
+                .layer(CompressionLayer::new())
                 .timeout(Duration::from_secs(10 * 60))
                 .layer(BufferLayer::new(1024))
                 .concurrency_limit(1024)
                 .load_shed()
-                .layer(RequestDecompressionLayer::new())
-                .layer(CompressionLayer::new())
                 .layer(DefaultBodyLimit::max(128 * 1024 * 1024))
                 .layer(TraceLayer::new_for_http()),
         )
