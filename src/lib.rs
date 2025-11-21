@@ -1,16 +1,12 @@
 mod args;
 mod log;
 mod router;
-#[cfg(not(windows))]
-mod service;
 
 pub use args::*;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 pub use log::*;
 pub use router::*;
-#[cfg(not(windows))]
-pub use service::*;
 use tokio::signal;
 
 pub struct ServerError(anyhow::Error);

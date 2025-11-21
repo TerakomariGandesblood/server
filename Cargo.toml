@@ -67,7 +67,7 @@ tokio = { version = "1.48.0", default-features = false, features = [
 # https://github.com/zkat/supports-color
 supports-color = { version = "3.0.2", default-features = false }
 # https://github.com/clap-rs/clap
-clap = { version = "4.5.52", default-features = false, features = [
+clap = { version = "4.5.53", default-features = false, features = [
   "std",
   "color",
   "help",
@@ -96,10 +96,6 @@ uuid = { version = "1.18.1", default-features = false, features = [
   "std",
   "v4",
   "fast-rng",
-] }
-# https://github.com/chipsenkbeil/service-manager-rs
-service-manager = { version = "0.8.0", default-features = false, features = [
-  "encoding",
 ] }
 # https://github.com/BurntSushi/walkdir
 walkdir = { version = "2.5.0", default-features = false }
