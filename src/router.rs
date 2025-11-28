@@ -30,7 +30,10 @@ pub fn router() -> Router {
     Router::new()
         .route(
             "/api/upload",
-            routing::post(api::upload).layer(ValidateRequestHeaderLayer::basic(USERNAME, PASSWORD)),
+            routing::post(api::upload).layer(
+                #[allow(deprecated)]
+                ValidateRequestHeaderLayer::basic(USERNAME, PASSWORD),
+            ),
         )
         .route("/api/list", routing::get(api::list))
         .nest_service(&format!("/{FILES_DIR_PATH}"), ServeDir::new(FILES_DIR_PATH))

@@ -24,7 +24,7 @@ tracing-subscriber = { version = "0.3.20", default-features = false, features = 
   "smallvec",
 ] }
 # https://github.com/tokio-rs/tracing
-tracing-appender = { version = "0.2.3", default-features = false }
+tracing-appender = { version = "0.2.4", default-features = false }
 # https://github.com/tokio-rs/tracing
 tracing-log = { version = "0.2.0", default-features = false, features = [
   "std",
@@ -50,7 +50,7 @@ tower = { version = "0.5.2", default-features = false, features = [
   "buffer",
 ] }
 # https://github.com/tower-rs/tower-http
-tower-http = { version = "0.6.6", default-features = false, features = [
+tower-http = { version = "0.6.7", default-features = false, features = [
   "auth",
   "compression-full",
   "decompression-full",
