@@ -11,9 +11,9 @@ build = "build.rs"
 # https://github.com/dtolnay/anyhow
 anyhow = { version = "1.0.100", default-features = false, features = ["std"] }
 # https://github.com/tokio-rs/tracing
-tracing = { version = "0.1.41", default-features = false, features = ["std"] }
+tracing = { version = "0.1.43", default-features = false, features = ["std"] }
 # https://github.com/tokio-rs/tracing
-tracing-subscriber = { version = "0.3.20", default-features = false, features = [
+tracing-subscriber = { version = "0.3.22", default-features = false, features = [
   "std",
   "fmt",
   "ansi",
@@ -50,7 +50,7 @@ tower = { version = "0.5.2", default-features = false, features = [
   "buffer",
 ] }
 # https://github.com/tower-rs/tower-http
-tower-http = { version = "0.6.7", default-features = false, features = [
+tower-http = { version = "0.6.8", default-features = false, features = [
   "auth",
   "compression-full",
   "decompression-full",
@@ -92,7 +92,7 @@ serde = { version = "1.0.228", default-features = false, features = [
 # https://github.com/kardeiz/sanitize-filename
 sanitize-filename = { version = "0.6.0", default-features = false }
 # https://github.com/uuid-rs/uuid
-uuid = { version = "1.18.1", default-features = false, features = [
+uuid = { version = "1.19.0", default-features = false, features = [
   "std",
   "v4",
   "fast-rng",
