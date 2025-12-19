@@ -43,7 +43,6 @@ pub fn router() -> Router {
                 .layer(DefaultBodyLimit::max(128 * 1024 * 1024))
                 .timeout(Duration::from_secs(10))
                 .load_shed()
-                .buffer(10240)
                 .concurrency_limit(1024)
                 .layer(RequestDecompressionLayer::new())
                 .layer(CompressionLayer::new())
