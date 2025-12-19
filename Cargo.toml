@@ -11,7 +11,7 @@ build = "build.rs"
 # https://github.com/dtolnay/anyhow
 anyhow = { version = "1.0.100", default-features = false, features = ["std"] }
 # https://github.com/tokio-rs/tracing
-tracing = { version = "0.1.43", default-features = false, features = ["std"] }
+tracing = { version = "0.1.44", default-features = false, features = ["std"] }
 # https://github.com/tokio-rs/tracing
 tracing-subscriber = { version = "0.3.22", default-features = false, features = [
   "std",
