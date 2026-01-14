@@ -13,7 +13,7 @@ async fn main() -> Result<()> {
     let _guard = server::init_log(&args.verbose, "log", env!("CARGO_CRATE_NAME"));
 
     let router = server::router();
-    let listener = TcpListener::bind("127.0.0.1:8001").await?;
+    let listener = TcpListener::bind("0.0.0.0:8001").await?;
     tracing::info!("listening on {}", listener.local_addr()?);
 
     axum::serve(listener, router)
