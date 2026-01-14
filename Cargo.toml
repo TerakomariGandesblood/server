@@ -43,7 +43,7 @@ axum = { version = "0.8.8", default-features = false, features = [
 # https://github.com/murar8/axum_typed_multipart
 axum_typed_multipart = { version = "0.16.5", default-features = false }
 # https://github.com/tower-rs/tower
-tower = { version = "0.5.2", default-features = false, features = [
+tower = { version = "0.5.3", default-features = false, features = [
   "limit",
   "load-shed",
   "timeout",
@@ -57,7 +57,7 @@ tower-http = { version = "0.6.8", default-features = false, features = [
   "fs",
 ] }
 # https://github.com/tokio-rs/tokio
-tokio = { version = "1.48.0", default-features = false, features = [
+tokio = { version = "1.49.0", default-features = false, features = [
   "fs",
   "macros",
   "signal",
@@ -66,7 +66,7 @@ tokio = { version = "1.48.0", default-features = false, features = [
 # https://github.com/zkat/supports-color
 supports-color = { version = "3.0.2", default-features = false }
 # https://github.com/clap-rs/clap
-clap = { version = "4.5.53", default-features = false, features = [
+clap = { version = "4.5.54", default-features = false, features = [
   "std",
   "color",
   "help",
@@ -99,7 +99,7 @@ uuid = { version = "1.19.0", default-features = false, features = [
 # https://github.com/BurntSushi/walkdir
 walkdir = { version = "2.5.0", default-features = false }
 # https://github.com/BurntSushi/jiff
-jiff = { version = "0.2.17", default-features = false, features = [
+jiff = { version = "0.2.18", default-features = false, features = [
   "std",
   "tz-system",
   "tz-fat",
