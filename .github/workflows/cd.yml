@@ -26,6 +26,8 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-pc-windows-msvc
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
       - name: Upload rust binary
         uses: taiki-e/upload-rust-binary-action@v1
         with:
@@ -34,4 +36,25 @@ jobs:
           zip: all
           tar: none
           target: x86_64-pc-windows-msvc
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+      - name: Upload rust binary
+        uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: server
+          archive: server-$target
+          zip: all
+          tar: none
+          target: x86_64-unknown-linux-musl
           token: ${{ secrets.GITHUB_TOKEN }}

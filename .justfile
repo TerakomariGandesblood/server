@@ -1,4 +1,8 @@
-update:
+[working-directory('web')]
+update-web:
+    bun update
+
+update: update-web
     prek auto-update
     cargo upgrade --incompatible
     cargo update
