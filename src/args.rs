@@ -1,3 +1,5 @@
+use std::net::Ipv4Addr;
+
 use clap::Parser;
 use clap::builder::Styles;
 use clap::builder::styling::{AnsiColor, Style};
@@ -7,6 +9,14 @@ use supports_color::Stream;
 #[derive(Parser)]
 #[command(version, about, long_about = None, styles = get_styles())]
 pub struct Args {
+    /// 监听地址
+    #[arg(short, long, default_value_t = Ipv4Addr::new(127,0,0,1))]
+    pub host: Ipv4Addr,
+
+    /// 监听端口
+    #[arg(short, long, default_value_t = 8001)]
+    pub port: u16,
+
     #[command(flatten)]
     pub verbose: Verbosity,
 }

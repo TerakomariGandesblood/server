@@ -1,5 +1,5 @@
-use std::env;
 use std::path::Path;
+use std::{env, fs};
 
 use anyhow::Result;
 use clap_verbosity_flag::Verbosity;
@@ -35,6 +35,10 @@ where
                 );
             }
         }
+    }
+
+    if !log_file_path.as_ref().try_exists()? {
+        fs::create_dir_all(&log_file_path)?;
     }
 
     let file_appender = RollingFileAppender::builder()
