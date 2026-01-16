@@ -1,0 +1,19 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - "main"
+    tags-ignore:
+      - "**"
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    branches:
+      - "main"
+    paths-ignore:
+      - "**.md"
+
+jobs:
+  test:
+    uses: TerakomariGandesblood/github-workflows/.github/workflows/rust-test.yml@main

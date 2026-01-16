@@ -1,60 +1,14 @@
 name: CD
 
 on:
-  push:
-    tags:
-      - v[0-9]+.*
+  release:
+    types: [published]
 
 permissions:
   contents: write
 
 jobs:
-  create-release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: taiki-e/create-gh-release-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-  windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-pc-windows-msvc
-      - name: Install bun
-        uses: oven-sh/setup-bun@v2
-      - name: Upload rust binary
-        uses: taiki-e/upload-rust-binary-action@v1
-        with:
-          bin: server
-          archive: server-$target
-          zip: all
-          tar: none
-          target: x86_64-pc-windows-msvc
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-  linux:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-unknown-linux-musl
-      - name: Install bun
-        uses: oven-sh/setup-bun@v2
-      - name: Upload rust binary
-        uses: taiki-e/upload-rust-binary-action@v1
-        with:
-          bin: server
-          archive: server-$target
-          zip: all
-          tar: none
-          target: x86_64-unknown-linux-musl
-          token: ${{ secrets.GITHUB_TOKEN }}
+  cd:
+    uses: TerakomariGandesblood/github-workflows/.github/workflows/rust-cd.yml@main
+    with:
+      bin: server
