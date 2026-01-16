@@ -113,6 +113,8 @@ jiff = { version = "0.2.18", default-features = false, features = [
 memory-serve = { version = "2.0.0-beta.0", default-features = false }
 
 [build-dependencies]
+# https://github.com/rust-shell-script/rust_cmd_lib
+cmd_lib = { version = "2.0.0", default-features = false }
 # https://github.com/tweedegolf/memory-serve
 memory-serve = { version = "2.0.0-beta.0", default-features = false }
 
